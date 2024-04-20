@@ -11,6 +11,8 @@ public class LevelManager : MonoBehaviour
 
     [SerializeField]
     private LevelCompletionNotifier levelCompletionNotifier;
+    [SerializeField]
+    private DeathFallNotifier deathFallNotifier;
 
     [SerializeField]
     private string nextLevelName;
@@ -18,16 +20,23 @@ public class LevelManager : MonoBehaviour
     void Start()
     {
         levelCompletionNotifier.OnLevelCompleted += OnLevelCompleted;
+        deathFallNotifier.OnDeathFall += OnDeathFall;
     }
 
     private void OnDestroy()
     {
         levelCompletionNotifier.OnLevelCompleted -= OnLevelCompleted;
+        deathFallNotifier.OnDeathFall -= OnDeathFall;
     }
 
     void OnLevelCompleted()
     {
         //Load next scene
         SceneManager.LoadScene(nextLevelName);
+    }
+
+    void OnDeathFall()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
