@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float runSpeed;
 
+    public bool isGrounded { get; private set; }
+
     // Start is called before the first frame update
 
     private bool isCrouching = false;
@@ -23,6 +25,7 @@ public class PlayerController : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         playerRigidBody = GetComponent<Rigidbody2D>();
+        isGrounded = true;
     }
 
     // Update is called once per frame
@@ -65,15 +68,6 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("Crouch", false);
             isCrouching = false;
         }
-
-        if (vertical > 0.0f)
-        {
-            animator.SetBool("Jump", true);
-        }
-        else
-        {
-            animator.SetBool("Jump", false);
-        }
     }
 
     void MovePlayer(float horizontal, float vertical)
@@ -87,10 +81,27 @@ public class PlayerController : MonoBehaviour
             transform.position = transform.position + new Vector3(runSpeed * Time.deltaTime, 0.0f, 0.0f);
         }
 
-        if (vertical > 0.0f)
+        if (vertical > 0.0f && isGrounded)
         {
-            playerRigidBody.AddForce(new Vector2(0.0f, jumpSpeed), ForceMode2D.Force);
+            playerRigidBody.AddForce(new Vector2(0.0f, jumpSpeed), ForceMode2D.Impulse);
+            animator.SetTrigger("Jump");
+            isGrounded = false;
         }
-        
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.transform.tag == "Platform")
+        {
+            isGrounded = true;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.transform.tag == "Platform")
+        {
+            isGrounded = false;
+        }
     }
 }
