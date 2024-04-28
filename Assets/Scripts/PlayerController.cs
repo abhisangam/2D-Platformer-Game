@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,6 +15,9 @@ public class PlayerController : MonoBehaviour
     private float runSpeed;
 
     public bool isGrounded { get; private set; }
+
+    //This really doesn't belong here
+    [SerializeField] private ScoreManager scoreManager;
 
     // Start is called before the first frame update
 
@@ -103,5 +107,10 @@ public class PlayerController : MonoBehaviour
         {
             isGrounded = false;
         }
+    }
+
+    internal void CollectKey()
+    {
+        scoreManager.IncrementScore(10);
     }
 }
