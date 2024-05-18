@@ -113,4 +113,9 @@ public class PlayerController : MonoBehaviour
     {
         scoreManager.IncrementScore(10);
     }
+
+    internal void Death()
+    {
+        animator.SetTrigger("Death");
+    }
 }
