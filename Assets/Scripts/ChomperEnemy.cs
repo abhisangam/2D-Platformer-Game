@@ -15,6 +15,10 @@ public class ChomperEnemy : MonoBehaviour
 
     private List<Vector3> patrolPointsGlobal;
 
+    [SerializeField]
+    private float attackRate; // attacks per second
+    private float attackTimer;
+
 
     private void Awake()
     {
@@ -33,6 +37,8 @@ public class ChomperEnemy : MonoBehaviour
         {
             animator.SetBool("IsWalking", true);
         }
+
+        attackTimer = 1.0f / attackRate;
     }
 
     // Update is called once per frame
@@ -49,6 +55,9 @@ public class ChomperEnemy : MonoBehaviour
             }
             MoveTowardsPatrolPoint();
         }
+
+        attackTimer -= Time.deltaTime;
+        if(attackTimer < 0f) attackTimer = 0f;
     }
 
     void MoveTowardsPatrolPoint()
@@ -71,7 +80,21 @@ public class ChomperEnemy : MonoBehaviour
     {
         if(collision.transform.tag == "Player")
         {
-            playerController.Death();
+            
+            playerController.PlayerInjured();
+            attackTimer = 1.0f / attackRate;
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.transform.tag == "Player")
+        {
+            if (attackTimer <= 0)
+            {
+                playerController.PlayerInjured();
+                attackTimer = 1.0f / attackRate;
+            }
         }
     }
 }
