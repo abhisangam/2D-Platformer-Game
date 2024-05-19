@@ -14,6 +14,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float runSpeed;
 
+    [SerializeField]
+    private PlayerHealthManager playerHealthManager;
+
     public bool isGrounded { get; private set; }
 
     //This really doesn't belong here
@@ -25,10 +28,13 @@ public class PlayerController : MonoBehaviour
     private bool isJumping = false;
 
     private Rigidbody2D playerRigidBody;
+
     void Start()
     {
         animator = GetComponent<Animator>();
-        playerRigidBody = GetComponent<Rigidbody2D>();
+        playerRigidBody = GetComponent<Rigidbody2D>(); 
+
+        playerHealthManager.OnPlayerDead += OnPlayerDead;
         isGrounded = true;
     }
 
@@ -112,5 +118,18 @@ public class PlayerController : MonoBehaviour
     internal void CollectKey()
     {
         scoreManager.IncrementScore(10);
+    }
+
+    internal void PlayerInjured()
+    {
+        playerHealthManager.RegisterPlayerInjury();
+    }
+
+    private void OnPlayerDead()
+    {
+        animator.SetTrigger("Death");
+        playerRigidBody.AddForce(new Vector2(0.0f, jumpSpeed), ForceMode2D.Impulse);
+        playerHealthManager.OnPlayerDead -= OnPlayerDead;
+        this.enabled = false;
     }
 }

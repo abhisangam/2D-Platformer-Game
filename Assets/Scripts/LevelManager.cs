@@ -17,16 +17,21 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     private string nextLevelName;
 
+    [SerializeField]
+    private PlayerHealthManager playerHealthManager;
+
     void Start()
     {
         levelCompletionNotifier.OnLevelCompleted += OnLevelCompleted;
         deathFallNotifier.OnDeathFall += OnDeathFall;
+        playerHealthManager.OnPlayerDead += OnPlayerDead;
     }
 
     private void OnDestroy()
     {
         levelCompletionNotifier.OnLevelCompleted -= OnLevelCompleted;
         deathFallNotifier.OnDeathFall -= OnDeathFall;
+        playerHealthManager.OnPlayerDead -= OnPlayerDead;
     }
 
     void OnLevelCompleted()
@@ -37,6 +42,17 @@ public class LevelManager : MonoBehaviour
 
     void OnDeathFall()
     {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    void OnPlayerDead()
+    {
+        StartCoroutine(LoadSceneAfterDuration(2.0f));
+    }
+
+    IEnumerator LoadSceneAfterDuration(float duration)
+    {
+        yield return new WaitForSeconds(duration);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
