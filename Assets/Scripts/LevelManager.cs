@@ -12,6 +12,7 @@ public class LevelManager : MonoBehaviour
 
     [SerializeField]
     private LevelCompletionNotifier levelCompletionNotifier;
+
     [SerializeField]
     private DeathFallNotifier deathFallNotifier;
 
@@ -51,7 +52,7 @@ public class LevelManager : MonoBehaviour
     void OnLevelCompleted()
     {
         //Load next scene
-        SceneManager.LoadScene(nextLevelName);
+        //SceneManager.LoadScene(nextLevelName);
     }
 
     void OnDeathFall()

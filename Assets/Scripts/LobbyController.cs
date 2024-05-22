@@ -6,16 +6,19 @@ using UnityEngine.UI;
 
 public class LobbyController : MonoBehaviour
 {
-    [SerializeField] private Button m_playButton;
+    [SerializeField] private Button playButton;
+    [SerializeField] private Button quitButton;
+    [SerializeField] private GameObject levelSelectorPanel;
 
     private void Awake()
     {
-        m_playButton.onClick.AddListener(OnPlayClicked);
+        playButton.onClick.AddListener(OnPlayClicked);
+        quitButton.onClick.AddListener(OnExitClicked);
     }
 
     void Start()
     {
-        
+        levelSelectorPanel.SetActive(false);
     }
 
     // Update is called once per frame
@@ -26,11 +29,17 @@ public class LobbyController : MonoBehaviour
 
     private void OnDestroy()
     {
-        m_playButton.onClick.RemoveAllListeners();
+        playButton.onClick.RemoveAllListeners();
+        quitButton.onClick.RemoveAllListeners();
     }
 
     void OnPlayClicked()
     {
-        SceneManager.LoadScene(1);
+        levelSelectorPanel.SetActive(true);   
+    }
+
+    void OnExitClicked()
+    {
+        Application.Quit();
     }
 }
