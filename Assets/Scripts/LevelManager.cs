@@ -11,9 +11,6 @@ public class LevelManager : MonoBehaviour
     private Transform levelStartPoint;
 
     [SerializeField]
-    private LevelCompletionNotifier levelCompletionNotifier;
-
-    [SerializeField]
     private DeathFallNotifier deathFallNotifier;
 
     [SerializeField]
@@ -35,7 +32,7 @@ public class LevelManager : MonoBehaviour
 
     void Start()
     {
-        levelCompletionNotifier.OnLevelCompleted += OnLevelCompleted;
+        LevelCompletionNotifier.OnLevelCompleted += OnLevelCompleted;
         deathFallNotifier.OnDeathFall += OnDeathFall;
         playerHealthManager.OnPlayerDead += OnPlayerDead;
         gameOverPanel.SetActive(false);
@@ -43,16 +40,18 @@ public class LevelManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        levelCompletionNotifier.OnLevelCompleted -= OnLevelCompleted;
+        LevelCompletionNotifier.OnLevelCompleted -= OnLevelCompleted;
         deathFallNotifier.OnDeathFall -= OnDeathFall;
         playerHealthManager.OnPlayerDead -= OnPlayerDead;
         playAgainButton.onClick.RemoveAllListeners();
     }
 
-    void OnLevelCompleted()
+    void OnLevelCompleted(int levelNumber)
     {
-        //Load next scene
-        //SceneManager.LoadScene(nextLevelName);
+        //Set level as completed
+        GameProgressManager.Instance.SetLevelStatus(levelNumber, LevelStatus.Completed);
+        //Unlock next level
+        GameProgressManager.Instance.SetLevelStatus(levelNumber + 1, LevelStatus.Unlocked);
     }
 
     void OnDeathFall()
