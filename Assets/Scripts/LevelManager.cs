@@ -14,21 +14,13 @@ public class LevelManager : MonoBehaviour
     private DeathFallNotifier deathFallNotifier;
 
     [SerializeField]
-    private string nextLevelName;
-
-    [SerializeField]
     private PlayerHealthManager playerHealthManager;
 
     [SerializeField]
     private GameObject gameOverPanel;
 
     [SerializeField]
-    private Button playAgainButton;
-
-    private void Awake()
-    {
-        playAgainButton.onClick.AddListener(OnPlayAgainButtonClicked);
-    }
+    private GameObject levelCompletePanel;
 
     void Start()
     {
@@ -36,6 +28,7 @@ public class LevelManager : MonoBehaviour
         deathFallNotifier.OnDeathFall += OnDeathFall;
         playerHealthManager.OnPlayerDead += OnPlayerDead;
         gameOverPanel.SetActive(false);
+        levelCompletePanel.SetActive(false);
     }
 
     private void OnDestroy()
@@ -43,7 +36,6 @@ public class LevelManager : MonoBehaviour
         LevelCompletionNotifier.OnLevelCompleted -= OnLevelCompleted;
         deathFallNotifier.OnDeathFall -= OnDeathFall;
         playerHealthManager.OnPlayerDead -= OnPlayerDead;
-        playAgainButton.onClick.RemoveAllListeners();
     }
 
     void OnLevelCompleted(int levelNumber)
@@ -52,6 +44,8 @@ public class LevelManager : MonoBehaviour
         GameProgressManager.Instance.SetLevelStatus(levelNumber, LevelStatus.Completed);
         //Unlock next level
         GameProgressManager.Instance.SetLevelStatus(levelNumber + 1, LevelStatus.Unlocked);
+
+        levelCompletePanel.SetActive(true);
     }
 
     void OnDeathFall()
@@ -80,10 +74,5 @@ public class LevelManager : MonoBehaviour
     {
         yield return new WaitForSeconds(duration);
         gameOverPanel.SetActive(true);
-    }
-
-    void OnPlayAgainButtonClicked()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

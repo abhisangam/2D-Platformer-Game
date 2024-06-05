@@ -76,7 +76,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1259106715
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: c4d7d6470acd7bf45971042161c6e018, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -125,8 +125,8 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 3
-  m_Material: {fileID: 0}
+  m_GravityScale: 1
+  m_Material: {fileID: 6200000, guid: c284892f744d5ae49b79bd9f8a8347d2, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -146,7 +146,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 3989865703815626035}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: c284892f744d5ae49b79bd9f8a8347d2, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -196,6 +196,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jumpSpeed: 10
   runSpeed: 10
+  gravityMultiplier: 3
+  playerHealthManager: {fileID: 0}
   scoreManager: {fileID: 0}
 --- !u!1 &8834215605453940828
 GameObject:

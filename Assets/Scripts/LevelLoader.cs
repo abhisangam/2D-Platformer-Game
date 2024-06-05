@@ -28,23 +28,6 @@ public class LevelLoader : MonoBehaviour
 
     void OnClick()
     {
-        LoadLevel(levelNumber);
-    }
-
-    public void LoadLevel(int levelNumber)
-    {
-        LevelStatus levelStatus = GameProgressManager.Instance.GetLevelStatus(levelNumber);
-        if (levelStatus == LevelStatus.Unlocked)
-        {
-            SceneManager.LoadScene("Level" + levelNumber.ToString());
-        }
-        else if (levelStatus == LevelStatus.Completed)
-        {
-            SceneManager.LoadScene("Level" + levelNumber.ToString());
-        }
-        else if (levelStatus == LevelStatus.Locked)
-        {
-            Debug.Log("Level " + levelNumber + " is locked. Complete the previous levels to play this level");
-        }
+        GameProgressManager.Instance.LoadLevel(levelNumber);
     }
 }
