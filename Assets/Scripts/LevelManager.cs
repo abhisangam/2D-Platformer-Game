@@ -11,13 +11,7 @@ public class LevelManager : MonoBehaviour
     private Transform levelStartPoint;
 
     [SerializeField]
-    private LevelCompletionNotifier levelCompletionNotifier;
-
-    [SerializeField]
     private DeathFallNotifier deathFallNotifier;
-
-    [SerializeField]
-    private string nextLevelName;
 
     [SerializeField]
     private PlayerHealthManager playerHealthManager;
@@ -26,33 +20,32 @@ public class LevelManager : MonoBehaviour
     private GameObject gameOverPanel;
 
     [SerializeField]
-    private Button playAgainButton;
-
-    private void Awake()
-    {
-        playAgainButton.onClick.AddListener(OnPlayAgainButtonClicked);
-    }
+    private GameObject levelCompletePanel;
 
     void Start()
     {
-        levelCompletionNotifier.OnLevelCompleted += OnLevelCompleted;
+        LevelCompletionNotifier.OnLevelCompleted += OnLevelCompleted;
         deathFallNotifier.OnDeathFall += OnDeathFall;
         playerHealthManager.OnPlayerDead += OnPlayerDead;
         gameOverPanel.SetActive(false);
+        levelCompletePanel.SetActive(false);
     }
 
     private void OnDestroy()
     {
-        levelCompletionNotifier.OnLevelCompleted -= OnLevelCompleted;
+        LevelCompletionNotifier.OnLevelCompleted -= OnLevelCompleted;
         deathFallNotifier.OnDeathFall -= OnDeathFall;
         playerHealthManager.OnPlayerDead -= OnPlayerDead;
-        playAgainButton.onClick.RemoveAllListeners();
     }
 
-    void OnLevelCompleted()
+    void OnLevelCompleted(int levelNumber)
     {
-        //Load next scene
-        //SceneManager.LoadScene(nextLevelName);
+        //Set level as completed
+        GameProgressManager.Instance.SetLevelStatus(levelNumber, LevelStatus.Completed);
+        //Unlock next level
+        GameProgressManager.Instance.SetLevelStatus(levelNumber + 1, LevelStatus.Unlocked);
+
+        levelCompletePanel.SetActive(true);
     }
 
     void OnDeathFall()
@@ -81,10 +74,5 @@ public class LevelManager : MonoBehaviour
     {
         yield return new WaitForSeconds(duration);
         gameOverPanel.SetActive(true);
-    }
-
-    void OnPlayAgainButtonClicked()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
