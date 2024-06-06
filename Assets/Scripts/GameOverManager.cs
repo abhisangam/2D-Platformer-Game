@@ -14,6 +14,11 @@ public class GameOverManager : MonoBehaviour
         playAgainButton.onClick.AddListener(OnPlayAgainButtonClicked);
     }
 
+    private void OnEnable()
+    {
+        AudioManager.Instance.Play("DeathBG");
+    }
+
     private void OnDestroy()
     {
         playAgainButton.onClick.RemoveAllListeners();
@@ -22,5 +27,6 @@ public class GameOverManager : MonoBehaviour
     void OnPlayAgainButtonClicked()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        AudioManager.Instance.Play("ButtonClick");
     }
 }

@@ -36,6 +36,8 @@ public class LobbyController : MonoBehaviour
                 levelSelectionButtons[i].GetComponent<Image>().color = Color.white;
             }
         }
+
+        AudioManager.Instance.Play("LobbyBG");
     }
 
     // Update is called once per frame
@@ -52,11 +54,13 @@ public class LobbyController : MonoBehaviour
 
     void OnPlayClicked()
     {
-        levelSelectorPanel.SetActive(true);   
+        levelSelectorPanel.SetActive(true);
+        AudioManager.Instance.Play("ButtonClick");
     }
 
     void OnExitClicked()
     {
         Application.Quit();
+        AudioManager.Instance.Play("ButtonClick");
     }
 }

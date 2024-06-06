@@ -36,7 +36,11 @@ public class PlayerController : MonoBehaviour
     private float verticalInput = 0.0f;
     private float verticalVelocity = 0.0f;
 
+    //foot setp audio clips
+    [SerializeField]
+    AudioClip[] footSteps;
 
+    public static bool IsPlayerDead = false; 
 
     void Start()
     {
@@ -45,6 +49,7 @@ public class PlayerController : MonoBehaviour
 
         playerHealthManager.OnPlayerDead += OnPlayerDead;
         isGrounded = true;
+        IsPlayerDead = false;
     }
 
     // Update is called once per frame
@@ -53,7 +58,7 @@ public class PlayerController : MonoBehaviour
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
-        Debug.Log("Velocity: " + verticalVelocity);
+        //Debug.Log("Velocity: " + verticalVelocity);
     }
 
     private void PlayPlayerMovementAnimations(float horizontal, float vertical)
@@ -148,6 +153,8 @@ public class PlayerController : MonoBehaviour
         isJumping = true;
         playerHealthManager.OnPlayerDead -= OnPlayerDead;
         this.enabled = false;
+        IsPlayerDead = true;
+        GetComponent<Collider2D>().excludeLayers = LayerMask.GetMask("Everything");
     }
 
     private void FixedUpdate()
@@ -156,6 +163,15 @@ public class PlayerController : MonoBehaviour
 
         MovePlayer(horizontalInput, verticalInput);
         PlayPlayerMovementAnimations(horizontalInput, verticalInput);
+    }
+    
+    void PlayFootStepAudio()
+    {
+        if (!isGrounded) return;
+
+        int idx = UnityEngine.Random.Range(0, footSteps.Length - 1);
+
+        GetComponent<AudioSource>().PlayOneShot(footSteps[idx]);
     }
 
     bool IsGrounded()

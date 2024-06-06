@@ -29,6 +29,7 @@ public class LevelManager : MonoBehaviour
         playerHealthManager.OnPlayerDead += OnPlayerDead;
         gameOverPanel.SetActive(false);
         levelCompletePanel.SetActive(false);
+        AudioManager.Instance.Play("GameplayBG");
     }
 
     private void OnDestroy()
@@ -46,6 +47,7 @@ public class LevelManager : MonoBehaviour
         GameProgressManager.Instance.SetLevelStatus(levelNumber + 1, LevelStatus.Unlocked);
 
         levelCompletePanel.SetActive(true);
+        AudioManager.Instance.Play("LevelComplete");
     }
 
     void OnDeathFall()

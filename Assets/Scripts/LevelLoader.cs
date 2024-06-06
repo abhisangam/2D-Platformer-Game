@@ -29,5 +29,6 @@ public class LevelLoader : MonoBehaviour
     void OnClick()
     {
         GameProgressManager.Instance.LoadLevel(levelNumber);
+        AudioManager.Instance.Play("ButtonClick");
     }
 }
