@@ -20,6 +20,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private PlayerHealthManager playerHealthManager;
 
+    [SerializeField]
+    private ParticleSystem deathParticles;
+
     public bool isGrounded { get; private set; }
 
     //This really doesn't belong here
@@ -116,6 +119,7 @@ public class PlayerController : MonoBehaviour
             if (isGrounded && (verticalVelocity <= 0.0f)) //if touches ground coming down
             {
                 isJumping = false;
+                verticalVelocity = 0.0f;
             }
             else
             {
@@ -155,6 +159,8 @@ public class PlayerController : MonoBehaviour
         this.enabled = false;
         IsPlayerDead = true;
         GetComponent<Collider2D>().excludeLayers = LayerMask.GetMask("Everything");
+
+        deathParticles.Play();
     }
 
     private void FixedUpdate()

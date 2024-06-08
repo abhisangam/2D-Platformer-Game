@@ -22,6 +22,11 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     private GameObject levelCompletePanel;
 
+    [SerializeField]
+    ParticleSystem levelStartPointSmoke;
+    [SerializeField]
+    private ParticleSystem levelEndPointSmoke;
+
     void Start()
     {
         LevelCompletionNotifier.OnLevelCompleted += OnLevelCompleted;
