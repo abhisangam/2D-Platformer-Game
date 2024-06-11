@@ -43,7 +43,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     AudioClip[] footSteps;
 
-    public static bool IsPlayerDead = false; 
+    public static bool IsPlayerDead = false;
+    public static bool IsPlayerNotMoving = false;
 
     void Start()
     {
@@ -138,6 +139,11 @@ public class PlayerController : MonoBehaviour
         displacement.y = verticalVelocity * Time.fixedDeltaTime;
 
         playerRigidBody.MovePosition(transform.position + displacement);
+
+        if (displacement.magnitude < 0.001f)
+            IsPlayerNotMoving = true;
+        else
+            IsPlayerNotMoving = false;
     }
 
     internal void CollectKey()
