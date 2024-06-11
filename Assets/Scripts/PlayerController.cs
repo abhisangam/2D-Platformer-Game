@@ -20,6 +20,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private PlayerHealthManager playerHealthManager;
 
+    [SerializeField]
+    private ParticleSystem deathParticles;
+
     public bool isGrounded { get; private set; }
 
     //This really doesn't belong here
@@ -36,7 +39,12 @@ public class PlayerController : MonoBehaviour
     private float verticalInput = 0.0f;
     private float verticalVelocity = 0.0f;
 
+    //foot setp audio clips
+    [SerializeField]
+    AudioClip[] footSteps;
 
+    public static bool IsPlayerDead = false;
+    public static bool IsPlayerNotMoving = false;
 
     void Start()
     {
@@ -45,6 +53,7 @@ public class PlayerController : MonoBehaviour
 
         playerHealthManager.OnPlayerDead += OnPlayerDead;
         isGrounded = true;
+        IsPlayerDead = false;
     }
 
     // Update is called once per frame
@@ -53,7 +62,7 @@ public class PlayerController : MonoBehaviour
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
-        Debug.Log("Velocity: " + verticalVelocity);
+        //Debug.Log("Velocity: " + verticalVelocity);
     }
 
     private void PlayPlayerMovementAnimations(float horizontal, float vertical)
@@ -111,6 +120,7 @@ public class PlayerController : MonoBehaviour
             if (isGrounded && (verticalVelocity <= 0.0f)) //if touches ground coming down
             {
                 isJumping = false;
+                verticalVelocity = 0.0f;
             }
             else
             {
@@ -129,6 +139,11 @@ public class PlayerController : MonoBehaviour
         displacement.y = verticalVelocity * Time.fixedDeltaTime;
 
         playerRigidBody.MovePosition(transform.position + displacement);
+
+        if (displacement.magnitude < 0.001f)
+            IsPlayerNotMoving = true;
+        else
+            IsPlayerNotMoving = false;
     }
 
     internal void CollectKey()
@@ -148,6 +163,10 @@ public class PlayerController : MonoBehaviour
         isJumping = true;
         playerHealthManager.OnPlayerDead -= OnPlayerDead;
         this.enabled = false;
+        IsPlayerDead = true;
+        GetComponent<Collider2D>().excludeLayers = LayerMask.GetMask("Everything");
+
+        deathParticles.Play();
     }
 
     private void FixedUpdate()
@@ -156,6 +175,15 @@ public class PlayerController : MonoBehaviour
 
         MovePlayer(horizontalInput, verticalInput);
         PlayPlayerMovementAnimations(horizontalInput, verticalInput);
+    }
+    
+    void PlayFootStepAudio()
+    {
+        if (!isGrounded) return;
+
+        int idx = UnityEngine.Random.Range(0, footSteps.Length - 1);
+
+        GetComponent<AudioSource>().PlayOneShot(footSteps[idx]);
     }
 
     bool IsGrounded()

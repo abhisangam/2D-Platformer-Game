@@ -22,6 +22,11 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     private GameObject levelCompletePanel;
 
+    [SerializeField]
+    ParticleSystem levelStartPointSmoke;
+    [SerializeField]
+    private ParticleSystem levelEndPointSmoke;
+
     void Start()
     {
         LevelCompletionNotifier.OnLevelCompleted += OnLevelCompleted;
@@ -29,6 +34,7 @@ public class LevelManager : MonoBehaviour
         playerHealthManager.OnPlayerDead += OnPlayerDead;
         gameOverPanel.SetActive(false);
         levelCompletePanel.SetActive(false);
+        AudioManager.Instance.Play("GameplayBG");
     }
 
     private void OnDestroy()
@@ -46,6 +52,7 @@ public class LevelManager : MonoBehaviour
         GameProgressManager.Instance.SetLevelStatus(levelNumber + 1, LevelStatus.Unlocked);
 
         levelCompletePanel.SetActive(true);
+        AudioManager.Instance.Play("LevelComplete");
     }
 
     void OnDeathFall()

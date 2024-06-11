@@ -27,10 +27,12 @@ public class LevelCompletionManager : MonoBehaviour
     void OnPlayAgainButtonClicked()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        AudioManager.Instance.Play("ButtonClick");
     }
 
     void OnPlayNextClicked()
     {
         GameProgressManager.Instance.LoadNextLevel();
+        AudioManager.Instance.Play("ButtonClick");
     }
 }

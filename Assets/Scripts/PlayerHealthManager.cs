@@ -33,10 +33,14 @@ public class PlayerHealthManager : MonoBehaviour
     {
         playerHealth -= 1;
         playerLives[playerHealth >= 0 ? playerHealth:0].gameObject.SetActive(false);
-
-        if(playerHealth == 0)
+        if (playerHealth == 0)
         {
             OnPlayerDead.Invoke();
+            AudioManager.Instance.Play("PlayerDead");
+        }
+        else
+        {
+            AudioManager.Instance.Play("PlayerHurt");
         }
     }
 }

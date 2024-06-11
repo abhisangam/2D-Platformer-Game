@@ -30,5 +30,6 @@ public class SceneLoader : MonoBehaviour
     void OnClick()
     {
         SceneManager.LoadScene(sceneName);
+        AudioManager.Instance.Play("ButtonClick");
     }
 }

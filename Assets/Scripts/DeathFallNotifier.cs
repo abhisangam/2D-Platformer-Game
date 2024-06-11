@@ -23,6 +23,7 @@ public class DeathFallNotifier : MonoBehaviour
         if (collision.transform.tag == "Player")
         {
             OnDeathFall?.Invoke();
+            AudioManager.Instance.Play("PlayerDead");
         }
     }
 }

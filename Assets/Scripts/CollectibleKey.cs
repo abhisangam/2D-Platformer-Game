@@ -17,6 +17,7 @@ public class CollectibleKey : MonoBehaviour
         if (collision.transform.tag == "Player")
         {
             collision.gameObject.GetComponent<PlayerController>().CollectKey();
+            AudioManager.Instance.Play("KeyCollected");
             animator.SetTrigger("KeyCollected");
             Destroy(gameObject, 2.0f);
         }

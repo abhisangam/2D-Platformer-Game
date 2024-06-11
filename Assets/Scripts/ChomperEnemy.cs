@@ -78,6 +78,7 @@ public class ChomperEnemy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (PlayerController.IsPlayerDead) return;
         if(collision.transform.tag == "Player")
         {
             
@@ -88,6 +89,7 @@ public class ChomperEnemy : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
+        if (PlayerController.IsPlayerDead) return;
         if (collision.transform.tag == "Player")
         {
             if (attackTimer <= 0)
